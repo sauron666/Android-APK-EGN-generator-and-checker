@@ -13,7 +13,7 @@ package.domain = com.egnchecker
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,kv
+source.include_exts = py,kv,png
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
@@ -47,7 +47,7 @@ requirements = python3,kivy,kivymd
 #presplash.filename = %(source.dir)s/data/presplash.png
 
 # (str) Icon of the application
-icon.filename = E:\python\bul\crow.png
+icon.filename = %(source.dir)s\crow.png
 
 # (list) Supported orientations
 # Valid options are: landscape, portrait, portrait-reverse or landscape-reverse
@@ -110,7 +110,7 @@ android.minapi = 21
 android.sdk = 20
 
 # (str) Android NDK version to use
-android.ndk = 23b
+android.ndk = 25b
 
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
 #android.ndk_api = 21
