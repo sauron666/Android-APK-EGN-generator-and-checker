@@ -1,0 +1,85 @@
+BoxLayout:
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+
+    Label:
+        text: "Генератор и проверка на ЕГН"
+        font_size: 24
+        size_hint_y: None
+        height: 50
+
+    Spinner:
+        id: region_spinner
+        text: "Избери регион"
+        values: [key for key in app.EGN_REGIONS.keys()]
+        size_hint_y: None
+        height: 44
+
+    Spinner:
+        id: gender_spinner
+        text: "Избери пол"
+        values: ["Мъж", "Жена"]
+        size_hint_y: None
+        height: 44
+
+    TextInput:
+        id: day_input
+        hint_text: "Ден"
+        multiline: False
+        size_hint_y: None
+        height: 40
+
+    TextInput:
+        id: month_input
+        hint_text: "Месец"
+        multiline: False
+        size_hint_y: None
+        height: 40
+
+    TextInput:
+        id: year_input
+        hint_text: "Година"
+        multiline: False
+        size_hint_y: None
+        height: 40
+
+    Label:
+        text: "Брой ЕГН (1-1000):"
+        size_hint_y: None
+        height: 40
+
+    Slider:
+        id: num_egn_slider
+        min: 1
+        max: 1000
+        value: 5
+        step: 1
+        size_hint_y: None
+        height: 40
+
+    Button:
+        text: "Генерирай ЕГН"
+        size_hint_y: None
+        height: 44
+        on_press: app.generate_egn_list()
+
+    TextInput:
+        id: check_egn_input
+        hint_text: "Въведете ЕГН за проверка"
+        multiline: False
+        size_hint_y: None
+        height: 40
+
+    Button:
+        text: "Провери ЕГН"
+        size_hint_y: None
+        height: 44
+        on_press: app.check_egn()
+
+    ScrollView:
+        GridLayout:
+            id: egn_display
+            cols: 1
+            size_hint_y: None
+            height: self.minimum_height
