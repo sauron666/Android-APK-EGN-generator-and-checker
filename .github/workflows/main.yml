@@ -1,46 +1,67 @@
-name: CI
+name: Build APK with Buildozer
+
+description: Build Python package with Kivy Buildozer
+author: Artem Bulgakov
+branding:
+  icon: package
+  color: yellow
+
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '0 0 1,15 * *'
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      # used to cache dependencies with a timeout
-      - name: Get Date
-        id: get-date
-        run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
-        shell: bash
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
 
-      - name: Cache Buildozer global directory
-        uses: actions/cache@v2
-        with:
-          path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y libssl-dev libffi-dev python3-dev build-essential zip zlib1g-dev libncurses5 libtinfo5 openjdk-17-jdk
 
-      - uses: actions/cache@v2
-        with:
-          path: .buildozer
-          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+    - name: Install Buildozer and Cython
+      run: |
+        python -m pip install --upgrade pip
+        pip install buildozer cython==0.29.36
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: buildozer android debug
-          buildozer_version: master
+    - name: Build the APK
+      run: |
+        buildozer android debug
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: package
-          path: ${{ steps.buildozer.outputs.filename }}
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: EGNChecker-debug.apk
+        path: "*.apk"
+
+inputs:
+  command:
+    description: Command to start Buildozer. Set to `buildozer ios debug` for iOS
+    required: true
+    default: buildozer android debug
+  repository_root:
+    description: Path to cloned repository. Set if you specified path for `actions/checkout` action.
+    required: true
+    default: .
+  workdir:
+    description: Working directory where buildozer.spec is located. Set to `src` if buildozer.spec is in `src` directory
+    required: true
+    default: .
+  buildozer_version:
+    description: Version of Buildozer to install. By default installs latest release
+    required: true
+    default: stable
+
+outputs:
+  filename:
+    description: Filename of built package
