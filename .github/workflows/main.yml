@@ -1,3 +1,9 @@
+      # Ensure main.py is copied to the correct location
+      name: Copy main.py to expected directory
+        run: |
+          cp main.py .buildozer/android/app/
+
+
 name: Build APK with Buildozer
 
 description: Build Python package with Kivy Buildozer
