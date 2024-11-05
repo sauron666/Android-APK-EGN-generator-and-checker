@@ -2,8 +2,6 @@ name: Build APK with Buildozer
 
 description: Build Python package with Kivy Buildozer
 
-author: Artem Bulgakov
-
 on:
   push:
     branches:
